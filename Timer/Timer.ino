@@ -12,6 +12,7 @@ int ledPin3 = 11;
 int ligado1 = 0;
 int ligado2 = 0;
 int eraNoite = 0;
+int ehNoite = 0;
 int ligouUltimo = 0;
 int count = 0;
 int i = 0;
@@ -36,13 +37,15 @@ unsigned long esperarDesligadoMin = 0;
 unsigned long esperarLigadoMin = 0;
 unsigned long tempoAnt =0;
 unsigned long tempoAntSensors =0;
-int valorLidoTemp = 0; //valor lido na entrada analogica
+unsigned long valorLidoTemp = 0; //valor lido na entrada analogica
 unsigned long valorLidoLum = 0; //valor lido na entrada analogica
 float temperatura = 0; //valorLido convertido para temperatura
 
 
 int botaoMais = 0;
 int botaoMenos = 0;
+
+
 
 void setup() {
   Serial.begin(9600); //Inicializa comunicação Serial
@@ -53,13 +56,14 @@ void setup() {
   tempoInicioLig1 = millis();
   tempoInicioDes2 = millis();
   ligado1=1;
+  ligouUltimo = 1;
   ligado2=0;
   digitalWrite(ledPin3, HIGH);
   esperarLigado = ((EEPROM.read(addr)));
   esperarLigado = (esperarLigado*1000*60);
 }
 
-void loop() {
+void loop() {  
   tempoAgora = millis();
   botaoMais = digitalRead(7);
   botaoMenos = digitalRead(6);
@@ -83,7 +87,8 @@ void loop() {
     Serial.println(valorLidoLum);
     count++;
   }else{
-    if((millis() - tempoAntSensors) >=900000){      
+    if((millis() - tempoAntSensors) >=300000){      
+    //if((millis() - tempoAntSensors) >=120000){      
       valorLidoLum = 0;
       i=0;
       while(i<50){
@@ -103,7 +108,7 @@ void loop() {
       valorLidoTemp = valorLidoTemp/i;
     }
   }
-  temperatura = (valorLidoTemp * 0.00488)* 100;  // 4.94V / 1023 = 0.00482 (precisão do A/D)
+  temperatura = (valorLidoTemp * 0.00488)* 100;  
   
   if (botaoMais == HIGH){
     esperarLigado = esperarLigado + 60000;
@@ -117,26 +122,37 @@ void loop() {
   }
   
   if (temperatura <= 36){
-    esperarDesligado = ((36*1000*60)+(6000*3))-(temperatura*1000*60);
+    esperarDesligado = ((2160000+(6000*3))-(temperatura*1000*60));
   }else{
-    esperarDesligado = (60000 * 3);
+    esperarDesligado = (60000*3);
   }
   
-  if(valorLidoLum < 150)
+  if(valorLidoLum < 100)
   {
     digitalWrite(ledPin2, HIGH);
     esperarDesligado = (esperarDesligado*12);
     if (esperarDesligado > (3600000*3)){
       esperarDesligado = (3600000*3);
     }
-    if (eraNoite == 0){
-      eraNoite = 1;
-    }
+    ehNoite =1;
   }
   else
   {
     digitalWrite(ledPin2, LOW);
-    if (eraNoite == 1){
+    if (ehNoite == 1){
+      eraNoite = 1;
+      ehNoite =0;      
+    }
+  }
+  
+  if(eraNoite == 1 && ligouUltimo == 2){
+      tempoInicioDes2 = tempoAgora;
+      Serial.println("eraNoite == 1 && ligouUltimo == 2");
+      eraNoite = 0;
+  }else{
+    if(eraNoite == 1 && ligouUltimo == 1){
+      tempoInicioDes1 = tempoAgora;      
+      Serial.println("eraNoite == 1 && ligouUltimo == 1");
       eraNoite = 0;
     }
   }
@@ -219,13 +235,7 @@ void loop() {
     }
   }
   
-  if(eraNoite == 1 && ligouUltimo == 2){
-    tempoDesligado2 = 0;
-  }else{
-    if(eraNoite == 1 && ligouUltimo == 1){
-      tempoDesligado1 = 0;
-    }
-  }
+
   
   if(tempoDesligado1 >= esperarDesligado && ligado1 == 0){
     digitalWrite(ledPin3, HIGH);
