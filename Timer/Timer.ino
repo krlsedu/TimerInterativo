@@ -162,22 +162,32 @@ void loop() {
     tempoDesligadoMin1 = (tempoDesligado1/1000/60);    
     lcd.setCursor(10,0);
     if(tempoDesligadoMin1 < 10){
-      lcd.print("M1D 0");
+      lcd.print("1D   ");
       lcd.print(tempoDesligadoMin1);
     }else{
-      lcd.print("M1D ");
-      lcd.print(tempoDesligadoMin1);
+      if(tempoDesligadoMin1<100 && tempoDesligadoMin1>=10){
+        lcd.print("1D  ");
+        lcd.print(tempoDesligadoMin1);
+      }else{
+        lcd.print("1D ");
+        lcd.print(tempoDesligadoMin1);
+      }
     }
   }else{
     tempoLigado1 = tempoAgora-tempoInicioLig1;
     tempoLigadoMin1 = (tempoLigado1/1000/60);
     lcd.setCursor(10,0);
     if(tempoLigadoMin1 < 10){
-      lcd.print("M1L 0");
+      lcd.print("1L   ");
       lcd.print(tempoLigadoMin1);
     }else{
-      lcd.print("M1L ");
-      lcd.print(tempoLigadoMin1);
+      if(tempoLigadoMin1 < 100 && tempoLigadoMin1 >= 10){
+        lcd.print("1L  ");
+        lcd.print(tempoLigadoMin1);
+      }else{
+        lcd.print("1L  ");
+        lcd.print(tempoLigadoMin1);
+      }
     }
   }
   
@@ -186,22 +196,32 @@ void loop() {
     tempoDesligadoMin2 = (tempoDesligado2/1000/60);    
     lcd.setCursor(10,1);
     if(tempoDesligadoMin2 < 10){
-      lcd.print("M2D 0");
+      lcd.print("2D   ");
       lcd.print(tempoDesligadoMin2);
     }else{
-      lcd.print("M2D ");
-      lcd.print(tempoDesligadoMin2);
+      if(tempoDesligadoMin2<100 && tempoDesligadoMin2>=10){
+        lcd.print("2D  ");
+        lcd.print(tempoDesligadoMin2);
+      }else{
+        lcd.print("2D ");
+        lcd.print(tempoDesligadoMin2);
+      }
     }
   }else{
     tempoLigado2 = tempoAgora-tempoInicioLig2;
     tempoLigadoMin2 = (tempoLigado2/1000/60);
     lcd.setCursor(10,1);
     if(tempoLigadoMin2 < 10){
-      lcd.print("M2L 0");
+      lcd.print("2L   ");
       lcd.print(tempoLigadoMin2);
     }else{
-      lcd.print("M2L ");
-      lcd.print(tempoLigadoMin2);
+      if(tempoLigadoMin2 < 100 && tempoLigadoMin2 >= 10){
+        lcd.print("2L  ");
+        lcd.print(tempoLigadoMin2);
+      }else{
+        lcd.print("2L  ");
+        lcd.print(tempoLigadoMin2);
+      }
     }
   }
   
