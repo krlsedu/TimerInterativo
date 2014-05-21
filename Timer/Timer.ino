@@ -113,12 +113,28 @@ void loop() {
   if (botaoMais == HIGH){
     esperarLigado = esperarLigado + 60000;
     EEPROM.write(addr,esperarLigado/1000/60);
-    delay(500);
+    lcd.setCursor(0,1);
+    if(esperarLigado/1000/60 <10){
+      lcd.print("L 0");
+      lcd.print(esperarLigado/1000/60); 
+    }else{
+      lcd.print("L ");
+      lcd.print(esperarLigado/1000/60); 
+    }
+    delay(250);
   }
   if (botaoMenos == HIGH){
     esperarLigado = esperarLigado - 60000;
     EEPROM.write(addr,esperarLigado/1000/60);
-    delay(500);
+    lcd.setCursor(0,1);
+    if(esperarLigado/1000/60 <10){
+      lcd.print("L 0");
+      lcd.print(esperarLigado/1000/60); 
+    }else{
+      lcd.print("L ");
+      lcd.print(esperarLigado/1000/60); 
+    }
+    delay(250);
   }
   
   if (temperatura <= 36){
