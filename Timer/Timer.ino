@@ -1,14 +1,14 @@
 #include <LiquidCrystal.h> 
 #include <EEPROM.h>
  
-LiquidCrystal lcd(10, 9, 5, 4, 3, 2);
+LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 
 int pinoSensorTemp = 0; //pino que está ligado o terminal central do LM35 (porta analogica 0)
 int pinoSensorLum = 1;
 int addr = 0;  
-int ledPin1 = 8;
-int ledPin2 = 12;
-int ledPin3 = 11;
+int ledPin1 = 10;
+int ledPin2 = 11;
+int ledPin3 = 12;
 int ligado1 = 0;
 int ligado2 = 0;
 int eraNoite = 0;
@@ -65,8 +65,8 @@ void setup() {
 
 void loop() {  
   tempoAgora = millis();
-  botaoMais = digitalRead(7);
-  botaoMenos = digitalRead(6);
+  botaoMais = digitalRead(8);
+  botaoMenos = digitalRead(9);
   
   if(count == 0){
     valorLidoLum = 0;
@@ -101,8 +101,9 @@ void loop() {
     }else{
       valorLidoTemp = 0;
       i=0;
-      while(i<50){
+      while(i<1000){
         valorLidoTemp = valorLidoTemp + analogRead(pinoSensorTemp);
+        //delay(1);
         i++;
       }
       valorLidoTemp = valorLidoTemp/i;
