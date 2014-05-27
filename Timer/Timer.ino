@@ -14,6 +14,8 @@ int ligado2 = 0;
 int eraNoite = 0;
 int ehNoite = 0;
 int ligouUltimo = 0;
+int podeLigar1 = 1;
+int podeLigar2 = 1;
 int count = 0;
 int i = 0;
 unsigned long tempoInicioDes1 = 0;
@@ -41,10 +43,8 @@ unsigned long valorLidoTemp = 0; //valor lido na entrada analogica
 unsigned long valorLidoLum = 0; //valor lido na entrada analogica
 float temperatura = 0; //valorLido convertido para temperatura
 
-
 int botaoMais = 0;
 int botaoMenos = 0;
-
 
 
 void setup() {
@@ -174,6 +174,8 @@ void loop() {
     }
   }
   
+  
+  
   if(ligado1==0){
     tempoDesligado1 = tempoAgora-tempoInicioDes1;
     tempoDesligadoMin1 = (tempoDesligado1/1000/60);    
@@ -272,9 +274,23 @@ void loop() {
     }
   }
   
-
+  if(esperarLigado > esperarDesligado){
+	podeLigar1 = 1;
+	podeLigar2 = 1;
+  }else{
+	if(ligado1 == 1){
+		podeLigar2 = 0;
+	}else{
+		podeLigar2 = 1;
+	}
+	if(ligado2 == 1){
+		podeLigar1 = 0;
+	}else{
+		podeLigar1 = 1;
+	}
+  }
   
-  if(tempoDesligado1 >= esperarDesligado && ligado1 == 0){
+  if(tempoDesligado1 >= esperarDesligado && ligado1 == 0 && podeLigar1 == 1){
     digitalWrite(ledPin3, HIGH);
     ligado1 = 1;
     tempoInicioLig1 =millis();
@@ -298,7 +314,7 @@ void loop() {
     }
   }
   
-  if(tempoDesligado2 >= esperarDesligado && ligado2 == 0){
+  if(tempoDesligado2 >= esperarDesligado && ligado2 == 0 && podeLigar2 == 1){
     digitalWrite(ledPin1, HIGH);
     ligado2 = 1;
     tempoInicioLig2 =millis();
